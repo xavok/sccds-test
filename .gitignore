@@ -1,0 +1,10 @@
+/node_modules
+/.idea
+web/*.codekit
+/*
+
+!/public/wp-content/themes/allonsy/
+
+/wp-content/plugins/
+/wp-content/uploads/
+/wp-content/themes/tw*/
