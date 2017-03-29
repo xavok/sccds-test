@@ -67,13 +67,21 @@ function bs_more_post_ajax() {
 	$out = '';
 	$ppp = (isset($_POST['ppp'])) ? $_POST['ppp'] : 10;
 	$offset = (isset($_POST['offset'])) ? $_POST['offset'] : 0;
-
 	$_name = $_GET['name'] != '' ? $_GET['name'] : '';
 	$_location = $_GET['location'] != '' ? $_GET['location'] : '';
-	$_specialty = $_GET['specialty-cat'] != '' ? $_GET['specialty-cat'] : '';
-
+    $_specialty = $_GET['specialty-cat'] != '' ? $_GET['specialty-cat'] : '';
+    if ($_name == ''  && isset($_POST['name'])) {
+        $_name = $_POST['name'];
+    }
+    if ($_location == '' && isset($_POST['location'])) {
+        $_location = $_POST['location'];
+    }
+    if ($_specialty == '' && isset($_POST['specialty-cat'])) {
+        $_specialty = $_POST['specialty-cat'];
+    }
 	// Search for just Name
-	if ($_GET['name'] != '' && $_GET['location'] == '' && $_GET['specialty-cat'] == '') {
+	if ($_name != '' && $_location == '' && $_specialty == '') {
+
 		$d_args = array(
 			'post_type'  => 'dentist',
 			'posts_per_page' => $ppp,
@@ -95,7 +103,7 @@ function bs_more_post_ajax() {
 	}
 
 	// Search for Name and Location
-	if ($_GET['name'] != '' && $_GET['location'] != '' && $_GET['specialty-cat'] == '') {
+	if ($_name != '' && $_location != '' && $_specialty == '') {
 		$d_args = array(
 			'post_type'  => 'dentist',
 			'posts_per_page' => $ppp,
@@ -138,7 +146,7 @@ function bs_more_post_ajax() {
 	}
 
 	// Search for Name and Specialty
-	if ($_GET['name'] != '' && $_GET['specialty-cat'] != '' && $_GET['location'] == '') {
+	if ($_name != '' && $_specialty != '' && $_location == '') {
 		$d_args = array(
 			'post_type'  => 'dentist',
 			'posts_per_page' => $ppp,
@@ -168,7 +176,7 @@ function bs_more_post_ajax() {
 	}
 
 	// Search for Name, Location, and Specialty
-	if ($_GET['name'] != '' && $_GET['location'] != '' && $_GET['specialty-cat'] != '') {
+	if ($_name != '' && $_location != '' && $_specialty != '') {
 		$d_args = array(
 			'post_type'  => 'dentist',
 			'posts_per_page' => $ppp,
@@ -219,7 +227,7 @@ function bs_more_post_ajax() {
 	}
 
 	// Search for just Location
-	if ($_GET['location'] != '' && $_GET['name'] == '' && $_GET['specialty-cat'] == '') {
+	if ($_location != '' && $_name == '' && $_specialty == '') {
 		$d_args = array(
 			'post_type'  => 'dentist',
 			'posts_per_page' => $ppp,
@@ -246,7 +254,7 @@ function bs_more_post_ajax() {
 	}
 
 	// Search for Location and Specialty
-	if ($_GET['location'] != '' && $_GET['specialty-cat'] != '' && $_GET['name'] == '') {
+	if ($_location != '' && $_specialty != '' && $_name == '') {
 	$d_args = array(
 			'post_type'  => 'dentist',
 			'posts_per_page' => $ppp,
@@ -281,7 +289,7 @@ function bs_more_post_ajax() {
 	}
 
 	// Search for just Specialty
-	if ($_GET['specialty-cat'] != '' && $_GET['name'] == '' && $_GET['location'] == '') {
+	if ($_specialty != '' && $_name == '' && $_location == '') {
 		$d_args = array(
 			'post_type'  => 'dentist',
 			'posts_per_page' => $ppp,
@@ -351,8 +359,9 @@ function bs_more_post_ajax() {
 
 		endwhile; ?>
 
-		<h2><?php echo $d_count; ?> Search Results for "<?php if( $_GET['name'] != '' ) { echo $_name . ' '; } ?><?php if( $_GET['location'] != '' ) { echo 'in ' . $_location . ' '; } ?><?php if( $_GET['specialty-cat'] != '' ) { echo 'specializing in ' . $_specialty; } ?>"</h2>
-
+        <?php if($offset == 0) { ?>
+		<h2><?php echo $d_count; ?> Search Results for "<?php if( $_name != '' ) { echo $_name . ' '; } ?><?php if($_location != '' ) { echo 'in ' . $_location . ' '; } ?><?php if( $_specialty != '' ) { echo 'specializing in ' . $_specialty; } ?>"</h2>
+        <?php } ?>
 	<?php else : ?>
 		<h2>Your search returned no results.</h2>
 		<p>If searching by location, try using only the city name or the zip code, not both. Also, when searching by city use only the city name for your search (i.e. Gilroy, not <strike>Gilroy, CA</strike>)</p>
@@ -361,8 +370,10 @@ function bs_more_post_ajax() {
 	<div class="blogpost-entry all-posts-wrapper dentist-search ajax_posts">
 		<?php echo $out; ?>
 	</div>
+    <?php if($offset == 0) { ?>
 
 	<div id="more_posts"><button class="bs-btn bs-btn-purple load-more-posts">Load more results</button></div>
+    <?php } ?>
 
 <?php }
 add_action('wp_ajax_nopriv_bs_more_post_ajax', 'bs_more_post_ajax');

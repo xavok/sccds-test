@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 	// var cat = $loader.data('category');
 	var $ppp = 10;
 	var $offset = $('.ajax_posts').find('article').length;
-  console.log($offset);
+  // console.log($offset);
 
 	$loader.on( 'click', bs_load_ajax_posts );
 
@@ -15,6 +15,9 @@ jQuery(document).ready(function($) {
 			dataType: 'html',
 			url: frontend_ajax_object.ajaxurl,
 			data: {
+				'name': $('#name').val(),
+				'location': $('#location').val(),
+				'specialty': $('#specialty').val(),
 				'ppp': $ppp,
 				'offset': $offset,
 				'action': 'bs_more_post_ajax',
@@ -24,7 +27,7 @@ jQuery(document).ready(function($) {
 			},
 			success: function(data) {
 				var $data = $(data);
-        console.log('data length ' + $data.length);
+        console.log($data);
 				if ($data.length) {
 					//var $newElements = $data.css({ opacity: 0 });
           var $newElements = $data;
@@ -42,8 +45,8 @@ jQuery(document).ready(function($) {
 		});
 	}
 	$offset += $ppp;
-  console.log('Offset ' + $offset);
-  console.log('PPP ' + $ppp);
+  // console.log('Offset ' + $offset);
+  // console.log('PPP ' + $ppp);
 	return false;
 	}
 });
