@@ -76,6 +76,9 @@ require_once( 'library/bs-customizer-additions.php' );
 /** Custom LearnDash Shortcodes */
 require_once( 'library/bs-custom-shortcodes.php' );
 
+/** Custom WP Jobs additions*/
+require_once( 'library/bs-custom-jobs-functions.php' );
+
 /** If your site requires protocol relative url's for theme assets, uncomment the line below */
 // require_once( 'library/protocol-relative-theme-assets.php' );
 
