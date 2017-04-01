@@ -35,7 +35,7 @@ $jobs_create = get_posts(array(
                 <?php echo get_avatar($author->ID); ?>
                 <h1><?php echo $author->user_login . '<br />'; ?></h1>
                 <ul>
-                    <?php if (!is_user_logged_in()) { ?>
+                    <?php if ($author->ID == get_current_user_id()) { ?>
                         <li><a href="/edit-profile/">Edit Profile</a></li>
                     <?php } ?>
 
