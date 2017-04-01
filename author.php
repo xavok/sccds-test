@@ -22,6 +22,10 @@ if (!empty($jobs)) {
 } else {
     $jobs_applied = [];
 }
+$jobs_create = get_posts(array(
+    'author' =>  $author->ID,
+    'post_type' => 'job_listing',
+));
 ?>
 
     <div id="page-full-width" role="main">
@@ -37,6 +41,12 @@ if (!empty($jobs)) {
 
                     <li><a href="/forums/user/<?php echo $author->user_login; ?>/">Forum</a></li>
                     <li><a href="/resources/classifieds/">Add/Edit ads</a></li>
+                </ul>
+                <h3>Jobs Created</h3>
+                <ul>
+                    <?php foreach ($jobs_create as $job) {
+                        echo '<li><a href="/job/' . $job->post_title .'/">' . $job->post_title . '</a></li>';
+                    } ?>
                 </ul>
                 <h3>Jobs Applied to</h3>
                 <ul>
