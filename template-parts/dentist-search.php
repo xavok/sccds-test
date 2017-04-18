@@ -73,7 +73,7 @@ if( $d_query->have_posts() ) : ?>
 					<?php if( !$d_ada ) : ?><p class="author-date post-meta"><span class="post-meta-date"><?php the_date('M j, Y'); ?></span></p><?php endif; ?>
 					<?php if( $d_ada ) : ?>
 					<div class="dentist-info">
-						<p class="d-ada-number">ADA #<?php echo $d_ada; ?></p>
+<!--						<p class="d-ada-number">ADA #--><?php //echo $d_ada; ?><!--</p>-->
 						<p class="d-address"><strong>Contact Information:</strong><br><?php echo $d_address; ?><br><?php echo $d_city; ?>, <?php echo $d_state; ?> <?php echo $d_zip; ?></p>
 						<?php if( $d_phone ) { ?><p class="d-phone"><?php echo $d_phone; ?></p><?php } ?>
 						<?php if( $d_email ) { ?><p class="d-email"><a href="mailto:<?php echo $d_email; ?>"><?php echo $d_email; ?></a></p><?php } ?>

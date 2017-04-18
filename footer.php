@@ -59,6 +59,11 @@
 
 	jQuery(document).ready(function($) {
 
+		$('label > [type="checkbox"], label > [type="radio"]').click(function() {
+			// $('label.is-checked').not(this).removeClass('is-checked');
+			$(this).parents('label').toggleClass('is-checked');
+		});
+
 		// Show/Hide Search Form
 		$('nav.top-bar.has-search button.search-toggle').click(function() {
 			$('nav.top-bar.has-search .menu-search-wrapper form#searchform').toggleClass('show');

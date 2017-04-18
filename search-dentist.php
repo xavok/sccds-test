@@ -31,7 +31,7 @@ get_header(); ?>
 				<select id="specialty" name="specialty-cat">
 						<option value="">All Specialties</option>
 					<?php foreach($terms as $term) : ?>
-						<option value="<?php echo $term->name; ?>"><?php echo $term->name; ?></option>
+						<option value="<?php echo $term->name; ?>" <?php if($_specialty == $term->name) echo 'selected'; ?>><?php echo $term->name; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>

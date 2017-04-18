@@ -1,5 +1,5 @@
 <?php
-// PORTFOLIO CUSTOM POST TYPE
+// DENTIST CUSTOM POST TYPE
 function my_custom_post_dentist() {
 	$labels = array(
 		'name'               => _x( 'Dentists', 'post type general name' ),
@@ -18,7 +18,7 @@ function my_custom_post_dentist() {
 	);
 	$args = array(
 		'labels'        	     => $labels,
-		'description'   	     => 'Holds our portfolio and portfolio specific data',
+		'description'   	     => 'Holds our dentist and dentist specific data',
 		'capablility_type' 	   => 'post',
 		'public'        	     => true,
 		'show_ui'							 => false,
@@ -36,6 +36,7 @@ add_action( 'init', 'my_custom_post_dentist' );
 // Add new image size for Dentists featured image
 if ( function_exists( 'add_image_size' ) ) {
 	add_image_size( 'dentist', 500, 500, true ); //(cropped)
+	add_image_size( 'blog-featured', 600, 400, true ); //(cropped)
 }
 
 

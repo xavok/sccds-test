@@ -1,11 +1,40 @@
 <?php
 
+// Shortcode for if user is logged in
+function check_user ($params, $content = null){
+  if ( is_user_logged_in() ){
+    return do_shortcode($content);
+  }
+  else{
+    return;
+  }
+}
+add_shortcode('loggedin', 'check_user' );
+
+// Shortcode for if user is not logged in
+function check_user2 ($params, $content = null){
+  if ( !is_user_logged_in() ){
+    return do_shortcode($content);
+  }
+  else{
+    return;
+  }
+}
+add_shortcode('loggedout', 'check_user2' );
+
 // Current Year Shortcode
 function bs_current_year() {
 	$year = date('Y');
 	return $year;
 }
 add_shortcode('year','bs_current_year');
+
+// Current Date Shortcode
+function bs_current_date() {
+	$year = date('F jS, Y');
+	return $year;
+}
+add_shortcode('current_date','bs_current_date');
 
 
 // Custome Search Shortcode
@@ -115,7 +144,7 @@ function bs_custom_search_shortcode( $atts ) {
 		<?php $terms = get_terms(['taxonomy' => 'specialty-cat', 'hide_empty' => false,]);	?>
     <form id="bs-custom-search" role="search" method="get" action="<?php echo home_url( '/' ); ?>">
 			<input type="hidden" name="search" value="dentist">
-      <label for="name"><span class="screen-reader-text">Search by Name:</span>
+      <label for="name"><span class="screen-reader-text">Search by Last Name:</span>
 				<input type="text" value="" name="name" id="name" placeholder="Search by Name" />
 			</label>
 			<label for="location"><span class="screen-reader-text">Search by City or Zip:</span>
@@ -133,7 +162,7 @@ function bs_custom_search_shortcode( $atts ) {
 			<!-- <input type="hidden" value="1" name="paged" /> -->
 			<!-- <input type="hidden" value="lat" name="<?php echo $json_lat; ?>" /> -->
 			<!-- <input type="hidden" value="long" name="<?php echo $json_long; ?>" /> -->
-			<!-- <input type="hidden" value="1" name="sentence" /> -->
+			<input type="hidden" value="1" name="sentence" />
       <input type="submit" id="searchsubmit" value="Search" />
     </form>
 
@@ -249,25 +278,46 @@ return $bs_social_variable;
 }
 
 
+// Get User First Name
+function bs_usermeta_firstname() {
+  $current_user = wp_get_current_user();
+  $user_id = $current_user->ID;
+  $key = 'first_name';
+  $single = true;
+	$firstname = get_user_meta( $user_id, $key, $single );
+	return $firstname;
+}
+add_shortcode('bs_firstname','bs_usermeta_firstname');
+
+// Get User Last Name
+function bs_usermeta_lastname() {
+  $current_user = wp_get_current_user();
+  $user_id = $current_user->ID;
+  $key = 'last_name';
+  $single = true;
+	$lastname = get_user_meta( $user_id, $key, $single );
+	return $lastname;
+}
+add_shortcode('bs_lastname','bs_usermeta_lastname');
+
+// Get User Degree Credentials
+function bs_usermeta_degree() {
+  $current_user = wp_get_current_user();
+  $user_id = $current_user->ID;
+  $key = 'degree';
+  $single = true;
+	$degree = get_user_meta( $user_id, $key, $single );
+	return $degree;
+}
+add_shortcode('bs_degree','bs_usermeta_degree');
+
 // Get User ADA Number
 function bs_usermeta_ada() {
   $current_user = wp_get_current_user();
   $user_id = $current_user->ID;
-  $key = '_mgm_cf_ada_number';
+  $key = 'ada_number';
   $single = true;
 	$ada_number = get_user_meta( $user_id, $key, $single );
 	return 'ADA#: ' . $ada_number . '<br>';
 }
 add_shortcode('bs_ada_number','bs_usermeta_ada');
-
-
-// Get User Degree
-function bs_usermeta_degree() {
-  $current_user = wp_get_current_user();
-  $user_id = $current_user->ID;
-  $key = '_mgm_cf_degree';
-  $single = true;
-	$degree = get_user_meta( $user_id, $key, $single );
-	return 'Degree: ' . $degree . '<br>';
-}
-add_shortcode('bs_degree','bs_usermeta_degree');
