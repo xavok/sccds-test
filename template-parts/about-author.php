@@ -18,7 +18,20 @@ for ($i = 1; $i <= 7; $i++) {
     $open[] = get_the_author_meta($i . '_day_open');
     $close[] = get_the_author_meta($i . '_day_close');
 }
-?>
+$url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+
+
+if (strpos($url,'courses') !== false) { ?>
+    <div class="about-the-author-wrap">
+        <div class="author-image">
+            <?php echo get_avatar( get_the_author_meta( 'ID' ), 80 ); ?>
+        </div>
+        <div class="author-description">
+            <strong>By <?php $authorName = the_author_meta('nickname'); echo $authorName; ?></strong><br>
+            <?php $authorDesc = the_author_meta('description'); echo $authorDesc; ?>
+        </div>
+    </div>
+<? } else {?>
 
 <div class="about-the-author-wrap">
     <div class="row">
@@ -114,3 +127,4 @@ for ($i = 1; $i <= 7; $i++) {
         </script>
     </div>
 </div>
+<?php } ?>

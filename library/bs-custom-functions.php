@@ -489,13 +489,13 @@ function my_show_extra_profile_fields( $user ) { ?>
                 <input type="text" name="ada_number" id="ada_number" value="<?php echo esc_attr( get_the_author_meta( 'ada_number', $user->ID ) ); ?>" class="regular-text" />
             </td>
         </tr>
-				<tr>
-            <th><label for="url">URL</label></th>
-
-            <td>
-                <input type="text" name="url" id="url" value="<?php echo esc_attr( get_the_author_meta( 'url', $user->ID ) ); ?>" class="regular-text" />
-            </td>
-        </tr>
+<!--				<tr>-->
+<!--            <th><label for="url">URL</label></th>-->
+<!---->
+<!--            <td>-->
+<!--                <input type="text" name="url" id="url" value="--><?php //echo esc_attr( get_the_author_meta( 'url', $user->ID ) ); ?><!--" class="regular-text" />-->
+<!--            </td>-->
+<!--        </tr>-->
 				<tr>
             <th><label for="practice_type">Practice Type</label></th>
 
@@ -625,7 +625,7 @@ function my_save_extra_profile_fields( $user_id ) {
     update_user_meta(absint($user_id), 'phone', wp_kses_post($_POST['phone']));
     update_user_meta(absint($user_id), 'fax', wp_kses_post($_POST['fax']));
     update_user_meta(absint($user_id), 'ada_number', wp_kses_post($_POST['ada_number']));
-    update_user_meta(absint($user_id), 'url', wp_kses_post($_POST['url']));
+//    update_user_meta(absint($user_id), 'url', wp_kses_post($_POST['url']));
     update_user_meta(absint($user_id), 'practice_type', wp_kses_post($_POST['practice_type']));
     // update_user_meta( absint( $user_id ), 'specialty', wp_kses_post( $_POST['specialty'] ) );
     update_user_meta(absint($user_id), 'dental_school', wp_kses_post($_POST['dental_school']));
