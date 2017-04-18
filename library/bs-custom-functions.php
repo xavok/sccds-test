@@ -80,6 +80,15 @@ function bs_more_post_ajax() {
         $_specialty = $_POST['specialty-cat'];
     }
 
+    //Search for all dentists
+
+    if ($_name == '' && $_location == '' && $_specialty == '') {
+        $d_args = array(
+            'post_type'  => 'dentist',
+            'posts_per_page' => $ppp,
+            'offset' => $offset,
+        );
+    }
 	// Search for just Name
 	if ($_name != '' && $_location == '' && $_specialty == '') {
 
@@ -331,7 +340,7 @@ function bs_more_post_ajax() {
 			<article id="post-' . get_the_ID() . '" class="' . implode(' ', get_post_class('index-card')) . '">
 				<div class="entry-content">
 					<div class="blog-page-title-excerpt article-right">
-						<h3>' . get_the_title() . '</h3>';
+						<h3><a href="/dentist/' . str_replace(' ', '-', get_the_title()) . '">' . get_the_title() . '</a></h3>';
 						if( $specialty_terms ) {
 						$out .= '<p class="dentist-specialty">';
 							foreach ($specialty_terms as $specialty_term) {
