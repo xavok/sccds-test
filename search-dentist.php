@@ -21,7 +21,7 @@ get_header(); ?>
 		?>
     <form id="bs-custom-search" role="search" method="get" action="<?php echo home_url( '/' ); ?>">
 			<input type="hidden" name="search" value="dentist">
-      <label for="name"><span class="screen-reader-text">Search by Name:</span>
+      <label for="name"><span class="screen-reader-text">Search by Last Name:</span>
 				<input type="text" value="<?php echo $_name; ?>" name="name" id="name" placeholder="Search by Name" />
 			</label>
 			<label for="location"><span class="screen-reader-text">Search by City or Zip:</span>
@@ -31,12 +31,13 @@ get_header(); ?>
 				<select id="specialty" name="specialty-cat">
 						<option value="">All Specialties</option>
 					<?php foreach($terms as $term) : ?>
-						<option value="<?php echo $term->name; ?>" <?php if($_specialty == $term->name) echo 'selected'; ?>><?php echo $term->name; ?></option>
+						<option value="<?php echo $term->name; ?>"><?php echo $term->name; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>
 			<input type="hidden" value="dentist" name="post_type" />
 			<!-- <input type="hidden" value="1" name="paged" /> -->
+			<input type="hidden" value="1" name="sentence" />
       <input type="submit" id="searchsubmit" value="Search" />
     </form>
 

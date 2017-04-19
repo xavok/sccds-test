@@ -24,13 +24,6 @@ $search = new WP_Query($search_query);
   get_template_part( 'template-parts/title-bar' );
 } ?>
 
-<?php if( get_field('page_intro_text') ) { ?>
-  <div class="page-intro-text">
-    <div class="page-intro-text-inner">
-      <p><?php the_field('page_intro_text'); ?></p>
-    </div>
-  </div>
-<?php } ?>
 <div id="page" role="main">
 
 <?php do_action( 'foundationpress_before_content' ); ?>
