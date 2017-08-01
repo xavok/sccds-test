@@ -26,10 +26,10 @@ get_header(); ?>
 <?php while ( have_posts() ) : the_post(); ?>
 	<article <?php post_class('main-content') ?> id="post-<?php the_ID(); ?>">
 		<?php if( get_theme_mod('internal-breadcrumbs') != '' ) {
-      if ( function_exists('yoast_breadcrumb') ) { yoast_breadcrumb('<nav aria-label="You are here:" role="navigation"> <ul class="breadcrumbs">','</ul>'); }
+      if ( function_exists('yoast_breadcrumb') ) { yoast_breadcrumb('<nav aria-label="You are here:" role="navigation"> <ul class="breadcrumbs">','</ul></nav>'); }
     } ?>
     <?php if( get_theme_mod('internal-title-bar') == '' ) { ?>
-      <h1 class="entry-title espresso-entry-title"><span class="espresso-event-date-card"><?php espresso_event_date_as_calendar_page(); ?></span><?php the_title(); ?></h1>
+      <h1 class="entry-title espresso-entry-title heeey"><span class="espresso-event-date-card"><?php espresso_event_date_as_calendar_page(); ?></span><?php the_title(); ?></h1>
       <div class="espresso-event-categories"><?php espresso_event_categories(); ?></div>
     <?php } ?>
 		<?php do_action( 'foundationpress_post_before_entry_content' ); ?>
@@ -52,7 +52,14 @@ get_header(); ?>
       <div class="espress-event-bottom">
         <h3>Event Details</h3>
         <div class="espresso-list-of-event-dates"><?php espresso_list_of_event_dates(); ?></div>
-        <div class="espresso-event-tickets"><?php echo do_shortcode('[ESPRESSO_TICKET_SELECTOR]'); ?></div>
+        <div class="espresso-event-tickets">
+          <?php /* echo do_shortcode('[ESPRESSO_TICKET_SELECTOR]'); */ ?>
+          <?php global $post; $event_obj = $post->EE_Event;
+            if ( $event_obj instanceof EE_Event ){
+              espresso_ticket_selector( $event_obj );
+            }
+          ?>
+        </div>
       </div>
 
     </section>
@@ -69,10 +76,6 @@ get_header(); ?>
 			} ?>
 		</div>
 		<?php } } ?>
-
-		<?php if( get_theme_mod('about-the-author') == '' ) {
-		get_template_part( 'template-parts/about-author' );
-		} ?>
 
 		<nav id="nav-single" class="nav-single">
 			<div class="nav-single-inner">

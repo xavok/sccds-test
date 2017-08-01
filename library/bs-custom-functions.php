@@ -29,6 +29,19 @@ function add_not_home_body_class($classes) {
 add_filter('body_class','add_not_home_body_class');
 
 
+// Disable email check on event registrations for non-members
+add_filter( 'EED_WP_Users_SPCO__verify_user_access__perform_email_user_match_check', 'ee_wp_users_remove_email_user_match_check_logged_out' );
+function ee_wp_users_remove_email_user_match_check_logged_out() {
+  // if ( ! is_user_logged_in() ) {
+  //   return false;
+  // } else {
+  //   return true;
+  // }
+	return false;
+}
+add_filter( 'EED_WP_Users_SPCO__verify_user_access__perform_email_user_match_check', '__return_false' );
+
+
 // Enqueue Scripts
 function bs_scripts_enqueue() {
 		$ajaxurl = '';
@@ -52,7 +65,7 @@ add_action( 'wp_enqueue_scripts', 'bs_scripts_enqueue' );
 // Shortcodes in widget
 add_filter('widget_text', 'do_shortcode');
 
-
+// Add query vars to custom dentist search
 add_filter('query_vars', 'bs_add_qv');
 function bs_add_qv($qv) {
 	$qv[] = 'location';
@@ -340,7 +353,7 @@ function bs_more_post_ajax() {
 			<article id="post-' . get_the_ID() . '" class="' . implode(' ', get_post_class('index-card')) . '">
 				<div class="entry-content">
 					<div class="blog-page-title-excerpt article-right">
-						<h3><a href="/dentist/' . str_replace(' ', '-', get_the_title()) . '">' . get_the_title() . '</a></h3>';
+						<h3><a href="' . get_bloginfo('url') . '/dentist/' . preg_replace('/[ ,]+/', '-', strtolower(get_the_title())) . '">' . get_the_title() . '</a></h3>';
 						if( $specialty_terms ) {
 						$out .= '<p class="dentist-specialty">';
 							foreach ($specialty_terms as $specialty_term) {
@@ -520,6 +533,23 @@ function my_show_extra_profile_fields( $user ) { ?>
             </td>
         </tr> -->
 				<tr>
+            <th><label for="primary_languages">Languages Spoken</label></th>
+
+            <td>
+                <input type="text" name="primary_languages" id="primary_languages" value="<?php echo esc_attr( get_the_author_meta( 'primary_languages', $user->ID ) ); ?>" class="regular-text" />
+            </td>
+        </tr>
+				<tr>
+            <th><label for="denti_cal">Denti-Cal</label></th>
+
+						<td>
+							<select name="denti_cal" id="denti_cal" >
+									<option value="Yes" <?php selected( 'Yes', get_the_author_meta( 'denti_cal', $user->ID ) ); ?>>Yes</option>
+									<option value="No" <?php selected( 'No', get_the_author_meta( 'denti_cal', $user->ID ) ); ?>>No</option>
+							</select>
+            </td>
+        </tr>
+				<tr>
             <th><label for="dental_school">Dental School</label></th>
 
             <td>
@@ -555,8 +585,62 @@ function my_show_extra_profile_fields( $user ) { ?>
             </td>
         </tr>
     </table>
-    <h2>Work Hours</h2>
-    <table>
+
+		<h3>Secondary Location</h3>
+		<table class="secondary-location form-table">
+				<tr>
+						<th><label for="secondary_company">Business Name</label></th>
+
+						<td>
+								<input type="text" name="secondary_company" id="secondary_company" value="<?php echo esc_attr( get_the_author_meta( 'secondary_company', $user->ID ) ); ?>" class="regular-text" />
+						</td>
+				</tr>
+				<tr>
+						<th><label for="secondary_address">Street Address</label></th>
+
+						<td>
+								<input type="text" name="secondary_address" id="secondary_address" value="<?php echo esc_attr( get_the_author_meta( 'secondary_address', $user->ID ) ); ?>" class="regular-text" />
+						</td>
+				</tr>
+				<tr>
+						<th><label for="secondary_city">City</label></th>
+
+						<td>
+								<input type="text" name="secondary_city" id="secondary_city" value="<?php echo esc_attr( get_the_author_meta( 'secondary_city', $user->ID ) ); ?>" class="regular-text" />
+						</td>
+				</tr>
+				<tr>
+						<th><label for="secondary_state">State</label></th>
+
+						<td>
+								<input type="text" name="secondary_state" id="secondary_state" value="<?php echo esc_attr( get_the_author_meta( 'secondary_state', $user->ID ) ); ?>" class="regular-text" />
+						</td>
+				</tr>
+				<tr>
+						<th><label for="secondary_zip">Zip Code</label></th>
+
+						<td>
+								<input type="text" name="secondary_zip" id="secondary_zip" value="<?php echo esc_attr( get_the_author_meta( 'secondary_zip', $user->ID ) ); ?>" class="regular-text" />
+						</td>
+				</tr>
+				<tr>
+						<th><label for="secondary_phone">Phone</label></th>
+
+						<td>
+								<input type="text" name="secondary_phone" id="secondary_phone" value="<?php echo esc_attr( get_the_author_meta( 'secondary_phone', $user->ID ) ); ?>" class="regular-text" />
+						</td>
+				</tr>
+				<tr>
+						<th><label for="secondary_fax">Fax</label></th>
+
+						<td>
+								<input type="text" name="secondary_fax" id="secondary_fax" value="<?php echo esc_attr( get_the_author_meta( 'secondary_fax', $user->ID ) ); ?>" class="regular-text" />
+						</td>
+				</tr>
+		</table>
+
+    <h3>Work Hours</h3>
+    <table class="work-hours form-table">
         <tr>
             <th><label for="1_day">Sunday</label></th>
             <td>
@@ -634,14 +718,25 @@ function my_save_extra_profile_fields( $user_id ) {
     update_user_meta(absint($user_id), 'phone', wp_kses_post($_POST['phone']));
     update_user_meta(absint($user_id), 'fax', wp_kses_post($_POST['fax']));
     update_user_meta(absint($user_id), 'ada_number', wp_kses_post($_POST['ada_number']));
-//    update_user_meta(absint($user_id), 'url', wp_kses_post($_POST['url']));
+		update_user_meta(absint($user_id), 'primary_languages', wp_kses_post($_POST['primary_languages']));
+		// update_user_meta(absint($user_id), 'url', wp_kses_post($_POST['url']));
     update_user_meta(absint($user_id), 'practice_type', wp_kses_post($_POST['practice_type']));
     // update_user_meta( absint( $user_id ), 'specialty', wp_kses_post( $_POST['specialty'] ) );
+		update_user_meta(absint($user_id), 'denti_cal', wp_kses_post($_POST['denti_cal']));
     update_user_meta(absint($user_id), 'dental_school', wp_kses_post($_POST['dental_school']));
     update_user_meta(absint($user_id), 'dental_school_graduation_year', wp_kses_post($_POST['dental_school_graduation_year']));
     update_user_meta(absint($user_id), 'spec_school', wp_kses_post($_POST['spec_school']));
     update_user_meta(absint($user_id), 'spec_school_graduation_year', wp_kses_post($_POST['spec_school_graduation_year']));
     update_user_meta(absint($user_id), 'retire_date', wp_kses_post($_POST['retire_date']));
+
+		update_user_meta(absint($user_id), 'secondary_company', wp_kses_post($_POST['secondary_company']));
+		update_user_meta(absint($user_id), 'secondary_address', wp_kses_post($_POST['secondary_address']));
+    update_user_meta(absint($user_id), 'secondary_city', wp_kses_post($_POST['secondary_city']));
+    update_user_meta(absint($user_id), 'secondary_state', wp_kses_post($_POST['secondary_state']));
+    update_user_meta(absint($user_id), 'secondary_zip', wp_kses_post($_POST['secondary_zip']));
+		update_user_meta(absint($user_id), 'secondary_phone', wp_kses_post($_POST['secondary_phone']));
+		update_user_meta(absint($user_id), 'secondary_fax', wp_kses_post($_POST['secondary_fax']));
+
     for($i = 1; $i <= 7; $i++) {
         update_user_meta(absint($user_id), $i.'_day_open', wp_kses_post($_POST[$i.'_day_open']));
         update_user_meta(absint($user_id), $i.'_day_close', wp_kses_post($_POST[$i.'_day_close']));

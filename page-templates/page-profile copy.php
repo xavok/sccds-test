@@ -157,13 +157,8 @@ function bs_get_user_zipcode() {
         <?php if ($author->ID == get_current_user_id()) { ?>
           <li><a href="<?php bloginfo('url'); ?>/edit-profile/">Edit Profile</a></li>
         <?php } ?>
-      </ul>
-      <!-- <ul>
-        <li><a href="<?php bloginfo('url'); ?>/forums/user/<?php echo $author->user_login; ?>/">Forum</a></li>
-      </ul> -->
 
-      <h3>Classified Ads</h3>
-      <ul>
+        <li><a href="<?php bloginfo('url'); ?>/forums/user/<?php echo $author->user_login; ?>/">Forum</a></li>
         <li><a href="<?php bloginfo('url'); ?>/resources/classifieds/">Add/Edit ads</a></li>
       </ul>
       <h3>Jobs Created</h3>

@@ -145,7 +145,7 @@ function bs_custom_search_shortcode( $atts ) {
     <form id="bs-custom-search" role="search" method="get" action="<?php echo home_url( '/' ); ?>">
 			<input type="hidden" name="search" value="dentist">
       <label for="name"><span class="screen-reader-text">Search by Last Name:</span>
-				<input type="text" value="" name="name" id="name" placeholder="Search by Name" />
+				<input type="text" value="" name="name" id="name" placeholder="Search by Last Name" />
 			</label>
 			<label for="location"><span class="screen-reader-text">Search by City or Zip:</span>
 				<input type="text" value="" name="location" id="location" placeholder="Search by City or Zip" />
@@ -318,6 +318,6 @@ function bs_usermeta_ada() {
   $key = 'ada_number';
   $single = true;
 	$ada_number = get_user_meta( $user_id, $key, $single );
-	return 'ADA#: ' . $ada_number . '<br>';
+	return $ada_number;
 }
 add_shortcode('bs_ada_number','bs_usermeta_ada');

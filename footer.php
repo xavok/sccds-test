@@ -52,17 +52,41 @@
 	var windowWidth = jQuery(window).width();
 	var headerHeight = jQuery('#masthead').height();
 	if(windowWidth > 640) {
-		var topScrollOffset = '112';
-	} else {
-		var topScrollOffset = '0';
+
 	}
+
+	$(window).resizeend(function() {
+		if ($(window).width() > 639) {
+			$('.js-off-canvas-exit.is-visible').click();
+		}
+	});
 
 	jQuery(document).ready(function($) {
 
-		$('label > [type="checkbox"], label > [type="radio"]').click(function() {
-			// $('label.is-checked').not(this).removeClass('is-checked');
-			$(this).parents('label').toggleClass('is-checked');
+		$('table#ee_filter_table, table.tkt-slctr-tbl').wrap('<div class="rwd-table-wrap"></div>');
+		if ($(window).width() < 480) {
+			$('.rwd-table-wrap').before('<p class="table-wrap-notice">Scroll left/right to view the entire list of events</p>');
+			$('.rwd-table-wrap').after('<p class="table-wrap-notice">Scroll left/right to view the entire list of events</p>');
+		}
+
+		// Filebase toggle buttons
+		$('li.tab-name a').click(function() {
+			$('li.bs-tab a.active').removeClass('active');
+			$(this).addClass('active');
+			$('div.tab-content.show').removeClass('show');
+			$('div.tab-content-name').addClass('show');
 		});
+		$('li.tab-date a').click(function() {
+			$('li.bs-tab a.active').removeClass('active');
+			$(this).addClass('active');
+			$('div.tab-content.show').removeClass('show');
+			$('div.tab-content-date').addClass('show');
+		});
+
+		// $('label > [type="checkbox"], label > [type="radio"]').click(function() {
+		// 	// $('label.is-checked').not(this).removeClass('is-checked');
+		// 	$(this).parents('label').toggleClass('is-checked');
+		// });
 
 		// Show/Hide Search Form
 		$('nav.top-bar.has-search button.search-toggle').click(function() {
@@ -71,6 +95,13 @@
 		$('ul.social-media-wrapper.has-search button.search-toggle').click(function() {
 			$('ul.social-media-wrapper.has-search .menu-search-wrapper form#searchform').toggleClass('show');
 		});
+
+    $('.learndash p:contains("Quiz"), .learndash span:contains("Quiz")').html(function(_, html) {
+      return  html.replace(/(Quiz)/g, 'Keyword');
+    });
+		$('.learndash p:contains("quiz"), .learndash span:contains("quiz")').html(function(_, html) {
+      return  html.replace(/(quiz)/g, 'keyword');
+    });
 
 		// $('input[type="checkbox"]').click(function() {
 		// 	var inputID = $(this).attr('id');
@@ -112,9 +143,6 @@
 
 			// Site Preloader
 			$('#preloader').addClass('loaded')
-			// $('#preloader img').fadeIn('fast');
-			// $('#preloader .spinner').addClass('loaded');
-			// $('#preloader img').addClass('loaded');
 			$('#preloader.loaded').delay(250).fadeOut(1000, function() {
 				$(this).hide();
 			});
@@ -140,6 +168,24 @@
 		    });
 			}
 	  });
+
+		// jQuery(function($) {
+		// 	// Scroll to hash on click
+		//   $('a[href*="#"]:not([href="#"].scroll-to-id)').click(function() {
+		//     // if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+		//       var target = $(this.hash);
+		// 			console.log(target);
+		//       target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+		//       if (target.length) {
+		//         $('html, body').animate({
+		//           scrollTop: target.offset().top
+		//         }, 1000);
+		//         return false;
+		//       }
+		//     // }
+		//   });
+		//
+		// });
 
 		// Float Labels
 		function floatLabel(inputType) {
@@ -242,23 +288,23 @@
 
 	});
 
-	jQuery(function($) {
-		// Scroll to hash on click
-	  $('a[href*="#"]:not([href="#"])').click(function() {
-	    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-	      var target = $(this.hash);
-				console.log(target);
-	      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-	      if (target.length) {
-	        $('html, body').animate({
-	          scrollTop: target.offset().top - topScrollOffset
-	        }, 1000);
-	        return false;
-	      }
-	    }
-	  });
-
-	});
+	// jQuery(function($) {
+	// 	// Scroll to hash on click
+	//   $('a[href*="#"]:not([href="#"])').click(function() {
+	//     if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+	//       var target = $(this.hash);
+	// 			console.log(target);
+	//       target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+	//       if (target.length) {
+	//         $('html, body').animate({
+	//           scrollTop: target.offset().top - topScrollOffset
+	//         }, 1000);
+	//         return false;
+	//       }
+	//     }
+	//   });
+	//
+	// });
 	<?php if( get_theme_mod( 'sticky-header' ) != '') { ?>
 	// Sticky Header Classie script
 	function init() {
@@ -332,7 +378,7 @@
 	});
 
 	;( function( $ ) {
-		$( '.swipebox' ).swipebox( {
+		$( '.swipebox, .thickbox, .enlarge, .fbPhoto' ).swipebox( {
 			useCSS : true, // false will force the use of jQuery for animations
 			useSVG : true, // false to force the use of png for buttons
 			initialIndexOnArray : 0, // which image index to init when a array is passed
@@ -346,27 +392,6 @@
 			loopAtEnd: false // true will return to the first image after the last image is reached
 		} );
 	} )( jQuery );
-
-	jQuery(function($) {
-		// Scroll to hash on click
-	  $('a[href*="#"]:not([href="#"])').click(function() {
-	    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-	      var target = $(this.hash);
-				console.log(target);
-	      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-	      if (target.length) {
-					$('.top-bar-right .menu li.active').removeClass('active');
-					$(this).addClass('active');
-	        $('html, body').animate({
-	          // scrollTop: target.offset().top - topScrollOffset
-						scrollTop: target.offset().top
-	        }, 1000);
-	        return false;
-	      }
-	    }
-	  });
-
-	});
 
 	//Light header switch Waypoint script
 	shrinkOn = jQuery('#masthead').height() * 2;

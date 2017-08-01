@@ -23,7 +23,7 @@
 							global $current_user;
       				wp_get_current_user();
 						?>
-							<p class="welcome-user">Welcome <?php echo $current_user->user_firstname; ?> <?php echo $current_user->user_lastname; ?> | <a style="color: #FFFFFF !important;" href="<?php bloginfo('url'); ?>/profile/">View/Edit Profile</a></p>
+							<p class="welcome-user">Welcome <?php echo $current_user->user_firstname; ?> <?php echo $current_user->user_lastname; ?> | <a style="color: #FFFFFF !important;" href="<?php bloginfo('url'); ?>/profile/">View Profile</a></p>
 						<?php endif; ?>
 						<?php foundationpress_top_bar_alt(); ?>
 					</div>

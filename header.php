@@ -27,7 +27,7 @@ $header_layout = get_theme_mod('header-layout');
 	</head>
 	<body <?php body_class(); ?>>
 		<!-- <div id="preloader" style="position: fixed; left: 0; top: 0; z-index: 9999999; width: 100%; height: 100%; overflow: visible; background: #FFF;"><img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/img/logo-stacked-black.svg" width="600" class="preloader-logo"></div> -->
-		<script>window.fbAsyncInit = function() { FB.init({ appId: '317466291976025', xfbml: true, version: 'v2.5' }); };
+		<!-- <script>window.fbAsyncInit = function() { FB.init({ appId: '317466291976025', xfbml: true, version: 'v2.5' }); };
     (function(d, s, id){ var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) {return;}
         js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/en_US/sdk.js"; fjs.parentNode.insertBefore(js, fjs); } (document, 'script', 'facebook-jssdk'));
     function fb_share() { FB.ui({ method: 'share', href: '<?php the_permalink(); ?>' },
@@ -49,7 +49,7 @@ $header_layout = get_theme_mod('header-layout');
         $like_array = json_decode($like_results, true);
         $like_count =  $like_array['shares'];
         return ($like_count ) ? $like_count : "0";
-    } ?>
+    } ?> -->
 
 	<?php do_action( 'foundationpress_after_body' ); ?>
 

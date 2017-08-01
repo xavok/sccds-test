@@ -6,7 +6,8 @@
  * @since FoundationPress 1.0.0
  */
 
-get_header(); ?>
+get_header();
+$hide_featured_image = get_field('hide_featured_image'); ?>
 
 <?php if( get_theme_mod('internal-title-bar') != '' ) {
   get_template_part( 'template-parts/title-bar' );
@@ -35,7 +36,7 @@ get_header(); ?>
 		<div class="entry-content">
 
 		<?php
-			if ( has_post_thumbnail() ) { ?>
+			if ( has_post_thumbnail() && $hide_featured_image == 'no' ) { ?>
 			<div class="single-featured-image">
 				<?php the_post_thumbnail(); ?>
 			</div>
@@ -55,9 +56,9 @@ get_header(); ?>
 		</div>
 		<?php } } ?>
 
-		<?php if( get_theme_mod('about-the-author') == '' ) {
+		<?php /* if( get_theme_mod('about-the-author') == '' ) {
 		get_template_part( 'template-parts/about-author' );
-		} ?>
+    } */ ?>
 
 		<nav id="nav-single" class="nav-single">
 			<div class="nav-single-inner">
