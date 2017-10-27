@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
 			data: {
 				'name': $('#name').val(),
 				'location': $('#location').val(),
-				'specialty': $('#specialty').val(),
+				'specialty-cat': $('#specialty').val(),
 				'ppp': $ppp,
 				'offset': $offset,
 				'action': 'bs_more_post_ajax',
@@ -49,4 +49,34 @@ jQuery(document).ready(function($) {
   // console.log('PPP ' + $ppp);
 	return false;
 	}
+
+    $('#gform_2').on('submit', function (e) {
+        console.log("da");
+        var formElement = $(this);
+        if (!formElement.find('#gRecaptcha').length) {
+            console.log("da2");
+            formElement.find('input').each(function () {
+                console.log("da3");
+                formElement.append('<div id="captcha-message"></div><div id="gRecaptcha"></div>');
+                var widgetId = grecaptcha.render('gRecaptcha', {
+                    'sitekey': '6LecGSwUAAAAAGxm_PuKhvvA5PBjdAGTfhrpFsJa',
+                    'size': 'invisible',
+                    'badge': 'inline',
+                    'callback': function () {
+                        gf_submitting_2 = false;
+                        formElement.find('input[type=submit]').trigger('click');
+                    }
+                });
+                $(formElement).find('.grecaptcha-badge').parent().css('display', 'none');
+                grecaptcha.execute(widgetId);
+                $(formElement).data('recaptcha-widget', widgetId);
+                e.preventDefault();
+            });
+        } else {
+            if (!grecaptcha.getResponse()) {
+                grecaptcha.execute();
+                e.preventDefault();
+            }
+        }
+    });
 });

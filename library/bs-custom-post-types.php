@@ -21,7 +21,7 @@ function my_custom_post_dentist() {
 		'description'   	     => 'Holds our dentist and dentist specific data',
 		'capablility_type' 	   => 'post',
 		'public'        	     => true,
-		'show_ui'							 => false,
+		'show_ui'							 => true,
 		'menu_position' 	     => 5,
     'taxonomies'           => array( 'post_tag' ),
 		'supports'      	     => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments', 'custom-fields', ),

@@ -635,7 +635,6 @@ header#masthead {
   margin-right: auto;
   z-index: 99;
   padding: 1.25rem 0 .5rem !important;
-  // background: url(http://dev2.uptownstudios.net/bettyyee/wp-content/uploads/2016/11/main-header-bg.jpg) no-repeat center bottom;
   background-size: cover;
   transition: all 500ms ease-out;
 
@@ -1873,7 +1872,7 @@ header#masthead.header-option-three {
 .heroimage {
   width: 100%;
   height: calc(660px + 2vw) !important;
-  background: url(http://dev2.uptownstudios.net/sccds/wp-content/uploads/2017/04/home-hero-new.jpg) no-repeat center bottom !important;
+  background: url(//dev2.uptownstudios.net/sccds2/wp-content/uploads/2017/08/home-hero-nowatermark.jpg) no-repeat center bottom !important;
   background-size: cover !important;
   margin: 0;
   @media only screen and (max-width: 640px) {
@@ -2177,6 +2176,7 @@ a.link-to-all:after {
 /* Home Blog Styles */
 .all-posts-wrapper .lcp_catlist {
   display: flex;
+  flex-wrap: wrap;
   margin-left: -2rem;
 }
 .all-posts-wrapper .lcp_catlist article,
@@ -3157,6 +3157,11 @@ body:not(.home) article.main-content {
     width: calc(100% - 220px);
   }
 }
+section#comments, section#respond {
+  padding: 0.625rem;
+  margin: 2rem 0;
+  background: $ltgray;
+}
 
 /* 4d. Single Blog Post Styles */
 @media only screen and (max-width: 47.9375em) {
@@ -4078,6 +4083,35 @@ body:not(.home) .entry-content form#your-profile span.description {
   display: block;
   color: red;
   font-weight: 600;
+}
+body.page-template-page-profile:not(.home) .entry-content {
+
+  #learndash_profile {
+    margin-top: 40px;
+
+    .profile_info,
+    .learndash_profile_heading:not(.no_radius) {
+      display: none;
+    }
+    .learndash-course-link a {
+      display: block;
+      line-height: 1.4;
+      padding: 15px 2% 10px;
+    }
+    .expand_collapse {
+      top: -25px;
+      right: -10px;
+      display: flex;
+      float: none !important;
+      justify-content: flex-end;
+
+      a {
+        font-size: .875rem !important;
+        display: inline-block;
+        padding: 0 10px;
+      }
+    }
+  }
 }
 .dentist-info-top {
   display: flex;

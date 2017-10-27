@@ -115,6 +115,17 @@ function bs_get_user_zipcode() {
   }
 }
 
+// Get User Ads
+function bs_get_user_ads() {
+    global $wpdb;
+    $author = wp_get_current_user();
+    $results =  $wpdb->get_results( 'SELECT * FROM '. $wpdb->prefix . 'awpcp_ads WHERE ad_contact_email = "'.$author->user_email .'"', OBJECT );
+    foreach ( $results as $ad )
+    {
+        echo '<li><a href="/resources/classifieds/edit-ad/?id='.$ad->ad_id.'">Edit ' . $ad->ad_title. '</a></li>';
+    }
+}
+
 ?>
 
 <?php if( get_theme_mod('internal-title-bar') != '' ) {
@@ -161,11 +172,13 @@ function bs_get_user_zipcode() {
       <!-- <ul>
         <li><a href="<?php bloginfo('url'); ?>/forums/user/<?php echo $author->user_login; ?>/">Forum</a></li>
       </ul> -->
-
+      <hr>
       <h3>Classified Ads</h3>
       <ul>
-        <li><a href="<?php bloginfo('url'); ?>/resources/classifieds/">Add/Edit ads</a></li>
+        <li><a href="<?php bloginfo('url'); ?>/resources/classifieds/place-ad/">Add New Classified</a></li>
+          <?php bs_get_user_ads(); ?>
       </ul>
+      <hr>
       <h3>Jobs Created</h3>
       <ul>
           <?php foreach ($jobs_create as $job) {
@@ -184,10 +197,12 @@ function bs_get_user_zipcode() {
             echo '<li>None at this time</li>';
           } ?>
       </ul>
-
-      <h3>Courses Enrolled in</h3>
-      <?php echo do_shortcode('[ld_course_list mycourses="1"]'); ?>
-
+      <hr>
+      <h3>Your Course Info</h3>
+      <p><em>Come back here once you've completed your in-person event/training to complete the quiz and receive your CE Certificate.</em></p>
+      <?php /* echo do_shortcode('[ld_course_list mycourses="true" orderby="title"]'); */ ?>
+      <?php echo do_shortcode('[ld_profile]'); ?>
+      <!-- <hr> -->
       <h3>CE Certificates</h3>
       <?php echo do_shortcode('[uo_learndash_certificates]'); ?>
 

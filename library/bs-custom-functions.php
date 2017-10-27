@@ -414,6 +414,13 @@ function my_show_extra_profile_fields( $user ) { ?>
     <table class="form-table">
 
 			<tr>
+					<th><label for="dentist_post">Dentist ID</label></th>
+
+					<td>
+						  <input type="text" name="dentist_post" id="dentist_post" value="<?php echo esc_attr( get_the_author_meta( '_dentist_post', $user->ID ) ); ?>" class="regular-text" />
+					</td>
+			</tr>
+			<tr>
 					<th><label for="first_name">First Name</label></th>
 
 					<td>
@@ -703,6 +710,7 @@ function my_save_extra_profile_fields( $user_id ) {
         return false;
 
     /* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
+		//update_user_meta(absint($user_id), '_dentist_post', wp_kses_post($_POST['_dentist_post']));
     update_user_meta(absint($user_id), 'first_name', wp_kses_post($_POST['first_name']));
     update_user_meta(absint($user_id), 'last_name', wp_kses_post($_POST['last_name']));
     update_user_meta(absint($user_id), 'middle_name', wp_kses_post($_POST['middle_name']));
@@ -743,11 +751,16 @@ function my_save_extra_profile_fields( $user_id ) {
     }
 }
 
+add_action('admin_init', 'disable_revisions');
+function disable_revisions(){
+  remove_post_type_support('dentist', 'revisions');
+}
 
-add_action('user_register','create_new_user_posts');
+//add_action('user_register','create_new_user_posts');
 add_action('user_new_form','create_new_user_posts');
 function create_new_user_posts($user_id){
 	global $wpdb;
+	$dentist_post_id = $user->_dentist_post;
 	$table_name = $wpdb->prefix . 'dentist_search';
 	$user = get_user_by('id', $user_id);
 	if ( !$user_id > 0 )
@@ -756,6 +769,7 @@ function create_new_user_posts($user_id){
 
 	// Create post object
 	$bs_create_dentist = array(
+		'ID' => $dentist_post_id,
 		'post_type' => 'dentist',
 		'post_title' => $user->first_name . ' ' . $user->last_name . ', ' . $user->degree,
 		'post_status' => 'publish',
@@ -766,41 +780,6 @@ function create_new_user_posts($user_id){
 	$create_dentist = wp_insert_post( $bs_create_dentist );
 	$specialty_terms = explode(', ',$user->practice_type );
 	wp_set_object_terms( $dentist_post_id, $specialty_terms, 'specialty-cat');
-
-	// $charset_collate = $wpdb->get_charset_collate();
-	// $sql = "CREATE TABLE IF NOT EXISTS $table_name (
-	// 	id mediumint(9) NOT NULL AUTO_INCREMENT,
-	// 	time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-	// 	dentist_id mediumint(9) NOT NULL,
-	// 	name text NOT NULL,
-	// 	city tinytext NOT NULL,
-	// 	specialty text NOT NULL,
-	// 	geo_long DECIMAL(10,7) NOT NULL,
-	// 	geo_lat DECIMAL(10,7) NOT NULL,
-	// 	PRIMARY KEY  (id)
-	// ) $charset_collate;";
-	//
-	// require_once( ABSPATH . 'wp-admin/includes/upgrade.php');
-	// dbDelta( $sql );
-	//
-	// $name = $user->first_name . ' ' . $user->last_name . ', ' . $user->degree;
-	// $city = $user->bs_city;
-	// $specialty = $specialty_terms;
-	// $long = $user->geo_longitude;
-	// $lat = $user->geo_latitude;
-	//
-	// $wpdb->insert(
-	// 	$table_name,
-	// 	array(
-	// 		'time' => current_time( 'mysql' ),
-	// 		'dentist_id' => $create_dentist,
-	// 		'name' => $name,
-	// 		'city' => $city,
-	// 		'specialty' => $specialty,
-	// 		'geo_long' => $long,
-	// 		'geo_lat'  => $lat,
-	// 	)
-	// );
 
 	wp_update_user( array( 'ID' => $user_id ) );
 
@@ -901,7 +880,7 @@ function create_new_user_posts($user_id){
 
 add_action('profile_update','update_user_dentist_posts');
 // add_action('is_iu_post_user_import','update_user_dentist_posts');
-function update_user_dentist_posts($user_id){
+function update_user_dentist_posts($user_id) {
 	if ( !$user_id > 0 )
 		return;
 
@@ -909,59 +888,22 @@ function update_user_dentist_posts($user_id){
 	$dentist_post_id = $user->_dentist_post;
 	global $wpdb;
 
-	// $table_name = $wpdb->prefix . 'dentist_search';
-
-	// $charset_collate = $wpdb->get_charset_collate();
-	// $sql = "CREATE TABLE $table_name (
-	// 	id mediumint(9) NOT NULL AUTO_INCREMENT,
-	// 	time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-	// 	-- dentist_id mediumint(9) NOT NULL,
-	// 	name text NOT NULL,
-	// 	city tinytext NOT NULL,
-	// 	specialty text NOT NULL,
-	// 	geo_long DECIMAL(10,7) NOT NULL,
-	// 	geo_lat DECIMAL(10,7) NOT NULL,
-	// 	PRIMARY KEY  (id)
-	// ) $charset_collate;";
-	//
-	// require_once( ABSPATH . 'wp-admin/includes/upgrade.php');
-	// dbDelta( $sql );
-	//
-	// $name = $user->first_name . ' ' . $user->last_name . ', ' . $user->degree;
-	// $city = $user->bs_city;
-	// $specialty = $user->practice_type;
-	// $long = $user->geo_longitude;
-	// $lat = $user->geo_latitude;
-	// $specialty_terms = explode(', ', $specialty );
-	//
-	// $wpdb->update(
-	// 	$table_name,
-	// 	array(
-	// 		// 'dentist_id' => $dentist_post_id,
-	// 		'name' => $name,
-	// 		'city' => $city,
-	// 		'specialty' => $specialty,
-	// 		'geo_long' => $long,
-	// 		'geo_lat'  => $lat,
-	// 	),
-	// 	array( 'dentist_id' => $dentist_post_id ),
-	// 	array( '%s','%s','%s','%f','%f' ),
-	// 	array( '%s' )
-	// );
+	$table_name = $wpdb->prefix . 'dentist_search';
 
 	// Create post object
-	// $bs_create_dentist = array(
-	// 	'post_type' => 'dentist',
-	// 	'post_title' => $user->first_name . ' ' . $user->last_name . ', ' . $user->degree,
-	// 	'post_status' => 'publish',
-	// 	'post_author' => $user_id
-	// );
+	$bs_create_dentist = array(
+		'ID' => $dentist_post_id,
+		'post_type' => 'dentist',
+		'post_title' => $user->first_name . ' ' . $user->last_name . ', ' . $user->degree,
+		'post_status' => 'publish',
+		'post_author' => $user_id
+	);
 
 	// Insert the post into the database
-	//$create_dentist = wp_insert_post( $bs_create_dentist );
+	$create_dentist = wp_insert_post( $bs_create_dentist );
 	$specialty_terms = explode(', ',$user->practice_type );
 
-	//wp_set_object_terms( $create_dentist, $specialty_terms, 'specialty-cat' );
+	wp_set_object_terms( $create_dentist, $specialty_terms, 'specialty-cat' );
 
 	// save a values from user to custom fields in Dentists post type
 	$field_key1 = 'field_58c7504d680bc';
@@ -1052,7 +994,7 @@ function update_user_dentist_posts($user_id){
 	$value19 = $user->retire_date;
 	update_field( $field_key19, $value19, $dentist_post_id );
 
-	update_user_meta($user_id,'_dentist_post',$dentist_post_id);
+	update_user_meta($user_id,'_dentist_post', $dentist_post_id);
 
 }
 
@@ -1068,46 +1010,46 @@ function delete_user_posts($user_id) {
 }
 
 // ACF lat/long field data into a custom table for searching
-function acf_google_maps_search_table_install() {
-
-  global $wpdb;
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-  $charset_collate = $wpdb->get_charset_collate();
-	$table_name = $wpdb->prefix . 'acf_google_map_search_geodata';
-  $sql = "CREATE TABLE $table_name (
-    id mediumint(9) NOT NULL AUTO_INCREMENT,
-    post_id BIGINT NULL UNIQUE,
-    lat DECIMAL(9,6) NULL,
-    lng DECIMAL(9,6) NULL,
-    UNIQUE KEY id (id)
-  ) {$charset_collate};";
-  dbDelta( $sql );
-
-	// now update historic post data
-	$acf_gms = new acf_gms;
-	$acf_gms->update_historic_post_gm_data();
-}
+// function acf_google_maps_search_table_install() {
+//
+//   global $wpdb;
+// 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+//   $charset_collate = $wpdb->get_charset_collate();
+// 	$table_name = $wpdb->prefix . 'acf_google_map_search_geodata';
+//   $sql = "CREATE TABLE $table_name (
+//     id mediumint(9) NOT NULL AUTO_INCREMENT,
+//     post_id BIGINT NULL UNIQUE,
+//     lat DECIMAL(9,6) NULL,
+//     lng DECIMAL(9,6) NULL,
+//     UNIQUE KEY id (id)
+//   ) {$charset_collate};";
+//   dbDelta( $sql );
+//
+// 	// now update historic post data
+// 	$acf_gms = new acf_gms;
+// 	$acf_gms->update_historic_post_gm_data();
+// }
 
 // save post
-add_action('acf/save_post', 'acf_google_maps_search_save_post', 20);
-function acf_google_maps_search_save_post( $post_id ) {
-  // bail early if no ACF data
-  //if( empty($_POST['acf']) ) {
-  //  return;
-  //}
-	$geo_lat = get_field( 'geo_latitude', $post_id );
-	$geo_long = get_field( 'geo_longitude', $post_id );
-
-	if( $geo_lat && $geo_long ){
-		$acf_gms = new acf_gms;
-		$data = [
-			'post_id' => $post_id,
-			'lng' => $geo_long,
-			'lat' => $geo_lat,
-		];
-		$acf_gms->save( $data );
-	}
-}
+// add_action('acf/save_post', 'acf_google_maps_search_save_post', 20);
+// function acf_google_maps_search_save_post( $post_id ) {
+//   // bail early if no ACF data
+//   //if( empty($_POST['acf']) ) {
+//   //  return;
+//   //}
+// 	$geo_lat = get_field( 'geo_latitude', $post_id );
+// 	$geo_long = get_field( 'geo_longitude', $post_id );
+//
+// 	if( $geo_lat && $geo_long ){
+// 		$acf_gms = new acf_gms;
+// 		$data = [
+// 			'post_id' => $post_id,
+// 			'lng' => $geo_long,
+// 			'lat' => $geo_lat,
+// 		];
+// 		$acf_gms->save( $data );
+// 	}
+// }
 
 // Get User Degree
 function bs_qo_get_user_degree() {

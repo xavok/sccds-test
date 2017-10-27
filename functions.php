@@ -117,3 +117,20 @@ add_filter( 'script_loader_tag', function ( $tag, $handle ) {
 
     return str_replace( ' src', ' async src', $tag );
 }, 10, 2 );
+
+add_action('gform_after_submission_2', 'bs_custom_after_submission', 10, 2);
+function bs_custom_after_submission() {
+    $captcha_fail = true;
+    if (isset($_POST['g-recaptcha-response'])) {
+        $captcha = $_POST['g-recaptcha-response'];
+        $secret = '6LecGSwUAAAAAIhTFMtGr6ZrFCN6zM41WKJGTGyK';
+        $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $secret . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']), true);
+        if ($response['success'] != false) {
+            $captcha_fail = false;
+        }
+    }
+    if ($captcha_fail) {
+        echo 'We are sorry, it looks like there was an error with your submission. Please use the back button on your browser and try again';
+        return false;
+    }
+}
